@@ -1,7 +1,7 @@
-import TelemetryDatum from './TelemetryDatum'
-import TelemetryDevice from './TelemetryDevice'
+import TelemetryStatus from './TelemetryStatus'
+import TelemetryObject from './TelemetryObject'
 
 export default interface Integration {
-	discover(): Promise<TelemetryDevice[]>,
-	update(): Promise<TelemetryDatum[]>
+	discover(): Promise<TelemetryObject[]>,
+	update(): Promise<TelemetryStatus[]>
 }

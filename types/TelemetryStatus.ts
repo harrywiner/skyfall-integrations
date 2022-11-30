@@ -1,4 +1,4 @@
-export default interface TelemetryDatum {
+export default interface TelemetryStatus {
     identifier: any,
     location?: LocationObject,
     batteryCharge?: number

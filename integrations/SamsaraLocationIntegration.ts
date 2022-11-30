@@ -1,7 +1,7 @@
 import Integration from "../types/Integration"
 
-import TelemetryDevice from "../types/TelemetryDevice"
-import TelemetryDatum from "../types/TelemetryDatum"
+import TelemetryObject from "../types/TelemetryObject"
+import TelemetryStatus from "../types/TelemetryStatus"
 
 import {createTagWithAssets, createAddress, updateTagAssets, getAllEquipment, getAllVehicles} from "../src/talus"
 
@@ -19,10 +19,10 @@ export class SamsaraLocationIntegration implements Integration {
         ) {}
 
     /**
-     * @returns {Promise<TelemetryDevice[]>} - A list of the telemetry devices at the associated event
+     * @returns {Promise<TelemetryObject[]>} - A list of the telemetry devices at the associated event
      */
     discover() {
-        return new Promise<TelemetryDevice[]>(async (resolve, reject) => {
+        return new Promise<TelemetryObject[]>(async (resolve, reject) => {
             console.log("Hello World")
 
             /**
@@ -47,14 +47,14 @@ export class SamsaraLocationIntegration implements Integration {
                 })
             
             let objs = [...vehicles, ...equipment]
-            let devices = objs.map(mapSamsaraToTelemetryDevice)
+            let devices = objs.map(mapSamsaraToTelemetryObject)
             
             resolve(devices)
         })
     }
 
     update() {
-        return new Promise<TelemetryDatum[]>(async (resolve, reject) => {
+        return new Promise<TelemetryStatus[]>(async (resolve, reject) => {
             var [vehicles, equipment] = await Promise.all([getAllVehicles(this.tagID), getAllEquipment(this.tagID)])
                 .catch(err => {
                     throw err
@@ -62,7 +62,7 @@ export class SamsaraLocationIntegration implements Integration {
             
             let objs = [...vehicles, ...equipment]
 
-            let data = objs.map(mapSamsaraToTelemetryDatum)
+            let data = objs.map(mapSamsaraToTelemetryStatus)
             resolve(data)
         })
         .catch(err => {
@@ -71,12 +71,12 @@ export class SamsaraLocationIntegration implements Integration {
     }
 }
 
-function mapSamsaraToTelemetryDevice(obj: SamsaraDevice): TelemetryDevice {
+function mapSamsaraToTelemetryObject(obj: SamsaraDevice): TelemetryObject {
     try {
         var name = obj.name
         var id = String(obj["id"])
 
-        var device: TelemetryDevice = {
+        var device: TelemetryObject = {
             identifier: id, 
             name: name
         }
@@ -85,7 +85,7 @@ function mapSamsaraToTelemetryDevice(obj: SamsaraDevice): TelemetryDevice {
         throw err
     }
 }
-function mapSamsaraToTelemetryDatum(obj: SamsaraDevice): TelemetryDatum {
+function mapSamsaraToTelemetryStatus(obj: SamsaraDevice): TelemetryStatus {
     try {
         var location = {
             longitude: obj.longitude, 
@@ -93,7 +93,7 @@ function mapSamsaraToTelemetryDatum(obj: SamsaraDevice): TelemetryDatum {
         }
 
         var id = String(obj["id"])
-        var datum: TelemetryDatum = {
+        var datum: TelemetryStatus = {
             identifier: id,
             location
         }
