@@ -1,4 +1,4 @@
-
+import {SamsaraLocationIntegration} from './integrations/SamsaraLocationIntegration'
 import ZeroNoxIntegration from './integrations/ZeroNoxIntegration'
 import { filterObjectsByStatusInGeofence } from './src/zeronox'
 import Geofence from './types/Geofence'
