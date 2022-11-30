@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import Geofence from '../types/Geofence'
 import TelemetryObject from '../types/TelemetryObject'
 import TelemetryStatus from '../types/TelemetryStatus'
 
@@ -59,6 +60,6 @@ export async function getObjectsAndStatus(token: string): Promise<TelemetryObjec
  * * create / import geofence object
  * * Point In Polygon implementation
  */
-export function filterObjectsInGeofence(objects: TelemetryObject[], geofence: any) {
+export function filterObjectsByStatusInGeofence(objects: TelemetryObject[], geofence: Geofence): TelemetryObject[] {
     return objects
 }
