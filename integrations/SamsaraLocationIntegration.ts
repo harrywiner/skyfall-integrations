@@ -21,6 +21,10 @@ export class SamsaraLocationIntegration implements Integration {
     /**
      * @returns {Promise<TelemetryObject[]>} - A list of the telemetry devices at the associated event
      */
+
+    authenticate() {
+        return Promise.resolve(undefined)
+    }
     discover() {
         return new Promise<TelemetryObject[]>(async (resolve, reject) => {
             console.log("Hello World")

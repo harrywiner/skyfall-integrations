@@ -1,4 +1,6 @@
+import TelemetryStatus from "./TelemetryStatus"
 export default interface TelemetryObject {
     identifier: any, 
-    name: string
+    name: string,
+    status?: TelemetryStatus
 }

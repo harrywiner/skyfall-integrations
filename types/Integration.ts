@@ -2,6 +2,7 @@ import TelemetryStatus from './TelemetryStatus'
 import TelemetryObject from './TelemetryObject'
 
 export default interface Integration {
-	discover(): Promise<TelemetryObject[]>,
-	update(): Promise<TelemetryStatus[]>
+	authenticate(): Promise<string|undefined>,
+	discover(token?: string): Promise<TelemetryObject[]>,
+	update(token?: string): Promise<TelemetryStatus[]>
 }
