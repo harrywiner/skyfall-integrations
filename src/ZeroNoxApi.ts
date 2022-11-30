@@ -42,7 +42,8 @@ export async function getObjectsAndStatus(token: string): Promise<TelemetryObjec
                 identifier: e["telematicsDeviceBase"]["vin"],
                 status: {
                     identifier: e["telematicsDeviceBase"]["vin"],
-                    location: {latitude: e["deviceGpsData"]["latitude"], longitude: e["deviceGpsData"]["longitude"]}
+                    location: {latitude: e["deviceGpsData"]["latitude"], longitude: e["deviceGpsData"]["longitude"]},
+                    batteryCharge: e["deviceTeleMaticsData"]["stateOfCharge"]
                 }
             }
         })

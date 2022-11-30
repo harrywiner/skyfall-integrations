@@ -32,13 +32,13 @@ zeronox.authenticate().then(token => {
     zeronox.discover(token)
         .then(objects => {
             console.log("DISCOVER: ")
-            console.log(objects)
+            console.log(JSON.stringify(objects, null, 2))
         })
 
     zeronox.update(token)
         .then(status => {
             console.log("UPDATE: ")
-            console.log(status)
+            console.log(JSON.stringify(status, null, 2))
         })
         .catch(error => console.error(error))
     }
