@@ -27,7 +27,7 @@ var zeronox = new ZeroNoxIntegration({})
 
 zeronox.authenticate().then(token => {
   if (token !== undefined) {
-    zeronox.discover(token)
+    zeronox.update(token)
       .then(objects => console.log(objects))
       .catch(error => console.error(error))
   }
