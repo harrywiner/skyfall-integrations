@@ -12,7 +12,7 @@ tsc: watch
 
 
 ## Handover to Sohan
-`TestSamsara` and `TestZeronox` detail the full functionality of the code as it exists. 
+`TestSamsara` and `TestZeroNox` detail the full functionality of the code as it exists. 
 
 See the provided Notion documentation for design justification
 

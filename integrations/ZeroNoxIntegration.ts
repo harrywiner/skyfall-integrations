@@ -1,6 +1,6 @@
 import Integration from "../types/Integration"
 import TelemetryStatus from "../types/TelemetryStatus"
-import { getObjectsAndStatus, filterObjectsByStatusInGeofence } from "../src/zeronox"
+import { getObjectsAndStatus, filterObjectsByStatusInGeofence } from "../src/ZeroNoxApi"
 import Geofence from "../types/Geofence"
 
 require('dotenv').config()

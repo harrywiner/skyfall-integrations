@@ -1,5 +1,5 @@
 import ZeroNoxIntegration from '../integrations/ZeroNoxIntegration'
-import { filterObjectsByStatusInGeofence } from '../src/zeronox'
+import { filterObjectsByStatusInGeofence } from '../src/ZeroNoxApi'
 import Geofence from '../types/Geofence'
 import TelemetryStatus from '../types/TelemetryStatus'
 
