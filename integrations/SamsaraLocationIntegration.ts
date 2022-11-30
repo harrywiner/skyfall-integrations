@@ -3,7 +3,7 @@ import Integration from "../types/Integration"
 import TelemetryObject from "../types/TelemetryObject"
 import TelemetryStatus from "../types/TelemetryStatus"
 
-import {createTagWithAssets, createAddress, updateTagAssets, getAllEquipment, getAllVehicles} from "../src/talus"
+import {createTagWithAssets, createAddress, updateTagAssets, getAllEquipment, getAllVehicles} from "../src/SamsaraApi"
 
 import { SamsaraDevice } from "../types/Samsara"
 
