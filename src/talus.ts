@@ -8,6 +8,8 @@ if (TOKEN === undefined) {
 }
 
 const sdk = require('api')('@samsara-dev-rel/v2019.01.01#2xqng621f6l8vvz9pu');
+
+// TODO: Change to be stateless
 sdk.auth(TOKEN);
 
 import {v2Response, TagResponse, SamsaraAsset, SamsaraEquipment, SamsaraVehicle, SamsaraDevice, GetEquipmentResponse, GetVehicleResponse} from "../types/Samsara";

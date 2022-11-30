@@ -1,6 +1,6 @@
 import Integration from "../types/Integration"
 import TelemetryStatus from "../types/TelemetryStatus"
-import { getObjectsAndStatus, filterObjectsInGeofence } from "../src/zeronox"
+import { getObjectsAndStatus, filterObjectsByStatusInGeofence } from "../src/zeronox"
 import Geofence from "../types/Geofence"
 
 require('dotenv').config()
@@ -21,7 +21,7 @@ export default class ZeroNoxIntegration implements Integration {
     async discover(token: string) {
         let objects = await getObjectsAndStatus(token)
 
-        return filterObjectsInGeofence(objects, this.geofence)
+        return filterObjectsByStatusInGeofence(objects, this.geofence)
     }
 
     async update(token: string) {

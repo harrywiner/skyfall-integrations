@@ -5,11 +5,11 @@ import TelemetryStatus from "../types/TelemetryStatus"
 
 import {createTagWithAssets, createAddress, updateTagAssets, getAllEquipment, getAllVehicles} from "../src/talus"
 
-import { SamsaraAsset, SamsaraDevice, SamsaraEquipment, SamsaraVehicle } from "../types/Samsara"
+import { SamsaraDevice } from "../types/Samsara"
 
 export class SamsaraLocationIntegration implements Integration {
 
-    private tagID = "3781326"
+    private tagID = ""
 
     constructor( 
         private tagName:string, 
@@ -23,6 +23,7 @@ export class SamsaraLocationIntegration implements Integration {
      */
 
     authenticate() {
+        // Unused, should authenticate api object to pass to api methods
         return Promise.resolve(undefined)
     }
     discover() {
