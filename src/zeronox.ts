@@ -53,3 +53,12 @@ export async function getObjectsAndStatus(token: string): Promise<TelemetryObjec
 
     return objects
 }
+
+/**
+ * Todo: 
+ * * create / import geofence object
+ * * Point In Polygon implementation
+ */
+export function filterObjectsInGeofence(objects: TelemetryObject[], geofence: any) {
+    return objects
+}

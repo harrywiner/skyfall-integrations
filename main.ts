@@ -23,7 +23,7 @@ const TEST_FORMATTED_ADDRESS = "Los Angeles, California, United States";
 //     console.log(data, null, 2)
 // }).catch(err =>{ console.error(err)})
 
-var zeronox = new ZeroNoxIntegration()
+var zeronox = new ZeroNoxIntegration({})
 
 zeronox.authenticate().then(token => {
   if (token !== undefined) {

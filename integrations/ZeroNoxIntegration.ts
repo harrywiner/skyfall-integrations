@@ -1,4 +1,5 @@
 import Integration from "../types/Integration"
+import { getObjectsAndStatus, filterObjectsInGeofence } from "../src/zeronox"
 
 require('dotenv').config()
 const TOKEN = process.env.ZERONOX_TOKEN
@@ -6,16 +7,19 @@ if (TOKEN === undefined) {
     throw Error("No token found")
 }
 
-import { getObjectsAndStatus } from "../src/zeronox"
 
 export default class ZeroNoxIntegration implements Integration {
+
+    constructor(public geofence: any){}
 
     authenticate() {
         return Promise.resolve(TOKEN)
     }
 
-    discover(token: string) {
-        return getObjectsAndStatus(token)
+    async discover(token: string) {
+        let objects = await getObjectsAndStatus(token)
+
+        return filterObjectsInGeofence(objects, {})
     }
 
     update(token: string) {
