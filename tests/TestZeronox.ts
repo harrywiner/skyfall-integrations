@@ -27,7 +27,9 @@ let coachella_geofence: Geofence = {
 
 var zeronox = new ZeroNoxIntegration(coachella_geofence)
 
-zeronox.authenticate().then(token => {
+zeronox.authenticate()
+  .catch(err => console.error(err))
+  .then(token => {
     if (token !== undefined) {
     zeronox.discover(token)
         .then(objects => {
@@ -42,7 +44,7 @@ zeronox.authenticate().then(token => {
         })
         .catch(error => console.error(error))
     }
-})
+  })
 
 
 console.log(filterObjectsByStatusInGeofence([], coachella_geofence))

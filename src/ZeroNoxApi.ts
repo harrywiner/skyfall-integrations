@@ -1,8 +1,9 @@
 
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 import Geofence from '../types/Geofence'
 import TelemetryObject from '../types/TelemetryObject'
 import TelemetryStatus from '../types/TelemetryStatus'
+import { TokenResponse } from '../types/ZeroNoxTypes'
 
 const pako = require('pako')
 
@@ -24,7 +25,14 @@ export async function getObjectsAndStatus(token: string): Promise<TelemetryObjec
 
     do {
         let url = `https://staging-znox-business.azurewebsites.net/api/devices/statuses?pn=${pn}&ps=${ps}`
-        let res = await axios.get(url,{headers: {"Authorization": `Bearer ${token}`}, decompress:true, responseType: "arraybuffer", responseEncoding: "utf8"})
+
+        let res = await axios.get(url,
+        {
+            headers: {"Authorization": `Bearer ${token}`}, 
+            decompress:true, 
+            responseType: "arraybuffer", 
+            responseEncoding: "utf8"
+        })
             .catch(err =>{ throw err })
 
         /**
@@ -63,4 +71,33 @@ export async function getObjectsAndStatus(token: string): Promise<TelemetryObjec
  */
 export function filterObjectsByStatusInGeofence(objects: TelemetryObject[], geofence: Geofence): TelemetryObject[] {
     return objects
+}
+
+export function refreshToken(client_id: string, scope: string, client_secret: string, grant_type: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        let url = "https://staging-znox-identity-interactive.azurewebsites.net/connect/token"
+        let data = {
+            client_id,
+            scope,
+            client_secret,
+            grant_type
+        }
+
+        let headers = {
+            "Content-Type": 'application/x-www-form-urlencoded',
+            "Accept-Encoding": "gzip",
+            "decompress":true, 
+            "responseType": "json", 
+            "responseEncoding": "utf8"
+        }
+
+        axios.post(url, data, { headers })
+            .then((res) => {
+                const decoded: TokenResponse = JSON.parse(pako.inflate(res.data, { to: 'string' }));
+                let token: string = decoded["access_token"]
+                resolve(token)
+            })
+            .catch(err => {
+                throw err})
+    })
 }
