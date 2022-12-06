@@ -21,3 +21,8 @@ See the provided Notion documentation for design justification
 `src` contains interface methods for the respective api integrations
 
 `lib` will be created upon building the typescript, and contains the js
+
+
+Todo Refactors: 
+Rename getAllEquipment to getAllTaggedEquipmentLocations
+Take out getVehicles
