@@ -3,9 +3,12 @@ import Integration from "../types/Integration"
 import TelemetryObject from "../types/TelemetryObject"
 import TelemetryStatus from "../types/TelemetryStatus"
 
-import {createTagWithAssets, createAddress, updateTagAssets, getAllEquipment, getAllVehicles} from "../src/SamsaraApi"
+import {createTagWithAssetsInAddress, createAddress, updateTagAssets, getAllTaggedEquipment, getAllTaggedVehicles} from "../src/SamsaraApi"
 
 import { SamsaraDevice } from "../types/Samsara"
+
+/** for debugging with persistance */
+const fs = require('fs');
 
 export class SamsaraLocationIntegration implements Integration {
 
@@ -36,22 +39,38 @@ export class SamsaraLocationIntegration implements Integration {
             */
             if (this.tagID === "") {
                 await createAddress(this.addressName, this.formattedAddress, this.geofence)
-                var tagID = await createTagWithAssets(this.addressName, this.tagName).catch(err => {throw err})
-                this.tagID = tagID
+                createTagWithAssetsInAddress(this.addressName, this.tagName)
+                    .then((tagID) => {
+                        this.tagID = tagID
+                        fs.writeFile("../data/tag.txt", this.tagID, (err: Error) => {console.error(err)})
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+                
+                if (this.tagID == "") {
+                    // err in createTag
+                    return
+                }
+                
             } else {
                 await updateTagAssets(this.addressName, this.tagID, this.tagName)
-                    .then((newID: string) => this.tagID = newID)
+                    .then((newID: string) => {
+                        this.tagID = newID
+                        fs.writeFile("../data/tag.txt", this.tagID, (err: Error) => {console.error(err)})
+                    })
             }
     
             /**
              * Get Discovered devices
+             * Add more to Promise.all to increase capture 
              */
-            var [vehicles, equipment] = await Promise.all([getAllVehicles(this.tagID), getAllEquipment(this.tagID)])
+            var [vehicles] = await Promise.all([getAllTaggedEquipment(this.tagID)])
                 .catch(err => {
                     throw err
                 })
             
-            let objs = [...vehicles, ...equipment]
+            let objs = [...vehicles]
             let devices = objs.map(mapSamsaraToTelemetryObject)
             
             resolve(devices)
@@ -60,7 +79,7 @@ export class SamsaraLocationIntegration implements Integration {
 
     update() {
         return new Promise<TelemetryStatus[]>(async (resolve, reject) => {
-            var [vehicles, equipment] = await Promise.all([getAllVehicles(this.tagID), getAllEquipment(this.tagID)])
+            var [vehicles, equipment] = await Promise.all([getAllTaggedVehicles(this.tagID), getAllTaggedEquipment(this.tagID)])
                 .catch(err => {
                     throw err
                 })

@@ -35,14 +35,15 @@ export function createAddress(addressName: string, formattedAddress: string, geo
  * @param {string} tagName  - The name of the new tag
  * @returns {Promise<string>} - the id of the created tag
  */
-export function createTagWithAssets(addressName: string, tagName: string): Promise<string> {
-    return new Promise(async (resolve, reject) => {
-        let assetIDs = await getAllAssetIDsInLocation(addressName)
-        sdk.createTag({name: tagName, assets: assetIDs}).then((res: TagResponse) => {
-            console.log("Created tag with ID: ", res["data"]["id"])
-            resolve(res.data.id)
-        }).catch((err: Error) => 
-            reject(err))
+export function createTagWithAssetsInAddress(addressName: string, tagName: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        getAllAssetIDsInLocation(addressName).then((assetIDs) => {
+            sdk.createTag({name: tagName, assets: assetIDs}).then((res: TagResponse) => {
+                console.log("Created tag with ID: ", res["data"]["id"])
+                resolve(res.data.id)
+            }).catch((err: Error) => 
+                {reject(err)})
+        }).catch((err: Error) => {reject(err)})
     })
 }
 
@@ -69,14 +70,14 @@ async function getAllAssetIDsInLocation(addressName: string): Promise<string[]> 
     return filtered_assets.map((e: SamsaraAsset) => String(e["id"]))
 }
 
-export async function getAllEquipment(tagID:string): Promise<SamsaraDevice[]> {
+export async function getAllTaggedEquipment(tagID:string): Promise<SamsaraDevice[]> {
     return new Promise((resolve, reject) => {
         sdk.getEquipmentLocations({tagIds: tagID}).then((res:GetEquipmentResponse) => {
             resolve(res.data.map(equipmentToDevice))
         }).catch((err: Error) => reject(err))
     })
 }
-export async function getAllVehicles(tagID:string): Promise<SamsaraDevice[]> {
+export async function getAllTaggedVehicles(tagID:string): Promise<SamsaraDevice[]> {
     return new Promise((resolve, reject) => {
         sdk.getVehicleStats({tagIds: tagID, types: 'gps'}).then((res: GetVehicleResponse) => {
             resolve(res.data.map(vehicleToDevice))
@@ -92,4 +93,4 @@ function vehicleToDevice(obj: SamsaraVehicle): SamsaraDevice {
 }
 
 
-//module.exports = {getAllVehicles, getAllEquipment, preprocess, updateTagAssets, createTagWithAssets, getAllAssetsInLocation}
+//module.exports = {getAllTaggedVehicles, getAllTaggedEquipment, preprocess, updateTagAssets, createTagWithAssetsInAddress, getAllAssetsInLocation}

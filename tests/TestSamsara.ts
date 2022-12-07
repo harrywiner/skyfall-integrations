@@ -16,12 +16,17 @@ const TEST_FORMATTED_ADDRESS = "Los Angeles, California, United States";
 
 var samsara = new SamsaraLocationIntegration(TEST_TAG, TEST_FORMATTED_ADDRESS, GEOFENCE, TEST_ADDRESS)
 
-samsara.discover().then(devices => {
-    console.log(devices, null, 2)
-}).catch(
-    (err) => 
-    console.error(err))
 
-samsara.update().then(data => {
-    console.log(data, null, 2)
-}).catch(err =>{ console.error(err)})
+async function main() {
+  await samsara.discover().then(devices => {
+      console.log(devices, null, 2)
+  }).catch(
+      (err) => 
+      console.error(err))
+  
+  await samsara.update().then(data => {
+      console.log(data, null, 2)
+  }).catch(err =>{ console.error(err)})
+}
+
+main()

@@ -24,5 +24,5 @@ See the provided Notion documentation for design justification
 
 
 Todo Refactors: 
-Rename getAllEquipment to getAllTaggedEquipmentLocations
+Rename getAllTaggedEquipment to getAllTaggedEquipmentLocations
 Take out getVehicles
