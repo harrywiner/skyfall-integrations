@@ -1,13 +1,11 @@
 import Integration from "../types/Integration"
 import TelemetryStatus from "../types/TelemetryStatus"
-import { getObjectsAndStatus, filterObjectsByStatusInGeofence } from "../src/ZeroNoxApi"
+import { getObjectsAndStatus, filterObjectsByStatusInGeofence, refreshToken } from "../src/ZeroNoxApi"
 import Geofence from "../types/Geofence"
 
 require('dotenv').config()
-const TOKEN = process.env.ZERONOX_TOKEN
-if (TOKEN === undefined) {
-    throw Error("No token found")
-}
+const CLIENT_ID = process.env.ZERONOX_CLIENT_ID
+const CLIENT_SECRET = process.env.ZERONOX_CLIENT_SECRET
 
 
 export default class ZeroNoxIntegration implements Integration {
@@ -15,7 +13,14 @@ export default class ZeroNoxIntegration implements Integration {
     constructor(public geofence: Geofence){}
 
     authenticate() {
-        return Promise.resolve(TOKEN)
+        if (CLIENT_ID === undefined) {
+            throw Error("No ZeroNox client_id found")
+        }
+        if (CLIENT_SECRET === undefined) {
+            throw Error("No ZeroNox client_secret found")
+        }
+        
+        return refreshToken(CLIENT_ID, "BusinessApi", CLIENT_SECRET, "client_credentials")
     }
 
     async discover(token: string) {

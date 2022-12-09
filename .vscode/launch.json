@@ -10,6 +10,18 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "ZeroNox No Auth",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/lib/tests/TestZeroNoxNoAuth.js",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "ZeroNox",
             "skipFiles": [
                 "<node_internals>/**"

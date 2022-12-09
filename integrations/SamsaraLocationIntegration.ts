@@ -88,7 +88,7 @@ export class SamsaraLocationIntegration implements Integration {
 
             let data = objs.map(mapSamsaraToTelemetryStatus)
             resolve(data)
-        })
+    })
         .catch(err => {
             throw err
         })
