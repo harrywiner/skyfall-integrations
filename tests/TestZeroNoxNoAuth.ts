@@ -3,6 +3,7 @@ import { filterObjectsByStatusInGeofence } from '../src/ZeroNoxApi'
 import Geofence from '../types/Geofence'
 import TelemetryStatus from '../types/TelemetryStatus'
 
+require('dotenv').config()
 
 /**
  * Sample Geofence for coachella
@@ -27,25 +28,19 @@ let coachella_geofence: Geofence = {
 
 var zeronox = new ZeroNoxIntegration(coachella_geofence)
 
-zeronox.authenticate()
-  .catch(err => 
-    console.error(err))
-  .then(token => {
-    if (token !== undefined) {
-    zeronox.discover(token)
-        .then(objects => {
-            console.log("DISCOVER: ")
-            console.log(JSON.stringify(objects, null, 2))
-        })
+let token = process.env.ZERONOX_TOKEN
 
-    zeronox.update(token)
-        .then(status => {
-            console.log("UPDATE: ")
-            console.log(JSON.stringify(status, null, 2))
-        })
-        .catch(error => console.error(error))
-    }
-  })
+if (token !== undefined) {
+zeronox.discover(token)
+    .then(objects => {
+        console.log("DISCOVER: ")
+        console.log(JSON.stringify(objects, null, 2))
+    })
 
-
-console.log(filterObjectsByStatusInGeofence([], coachella_geofence))
+zeronox.update(token)
+    .then(status => {
+        console.log("UPDATE: ")
+        console.log(JSON.stringify(status, null, 2))
+    })
+    .catch(error => console.error(error))
+}

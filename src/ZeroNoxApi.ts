@@ -3,7 +3,8 @@ import axios, {AxiosResponse} from 'axios'
 import Geofence from '../types/Geofence'
 import TelemetryObject from '../types/TelemetryObject'
 import TelemetryStatus from '../types/TelemetryStatus'
-import { TokenResponse } from '../types/ZeroNoxTypes'
+import { TokenResponse, StatusResponse } from '../types/ZeroNoxTypes'
+const qs = require('qs')
 
 const pako = require('pako')
 
@@ -29,22 +30,15 @@ export async function getObjectsAndStatus(token: string): Promise<TelemetryObjec
         let res = await axios.get(url,
         {
             headers: {"Authorization": `Bearer ${token}`}, 
-            decompress:true, 
-            responseType: "arraybuffer", 
-            responseEncoding: "utf8"
         })
             .catch(err =>{ throw err })
 
-        /**
-         * Decode from GZip using 'pako'
-         */
-        const decoded: Array<any> = JSON.parse(pako.inflate(res.data, { to: 'string' }));
-        lastSize = decoded.length
+        lastSize = res.data.length
 
         /**
          * Extract Objects
          */
-        let foundObjects: TelemetryObject[] = decoded.map((e) => {
+        let foundObjects: TelemetryObject[] = res.data.map((e: StatusResponse) => {
             return { 
                 name: e["telematicsDeviceBase"]["vin"], 
                 identifier: e["telematicsDeviceBase"]["vin"],
@@ -75,29 +69,31 @@ export function filterObjectsByStatusInGeofence(objects: TelemetryObject[], geof
 
 export function refreshToken(client_id: string, scope: string, client_secret: string, grant_type: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        let url = "https://staging-znox-identity-interactive.azurewebsites.net/connect/token"
-        let data = {
-            client_id,
-            scope,
-            client_secret,
-            grant_type
-        }
+        const token_url = 'https://staging-znox-identity-interactive.azurewebsites.net/connect/token';
 
-        let headers = {
-            "Content-Type": 'application/x-www-form-urlencoded',
-            "Accept-Encoding": "gzip",
-            "decompress":true, 
-            "responseType": "json", 
-            "responseEncoding": "utf8"
-        }
+        const axiosConfig = {
+        timeout: 30000,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        };
 
-        axios.post(url, data, { headers })
-            .then((res) => {
-                const decoded: TokenResponse = JSON.parse(pako.inflate(res.data, { to: 'string' }));
-                let token: string = decoded["access_token"]
-                resolve(token)
-            })
-            .catch(err => {
-                throw err})
+        const requestData = {
+            client_id: client_id,
+            client_secret: client_secret,
+            grant_type: grant_type,
+        };
+
+        axios
+        .post(token_url, qs.stringify(requestData), axiosConfig)
+        .then((res) => {
+            // handle success
+            let data: TokenResponse = res.data
+            resolve(data.access_token);
+        })
+        .catch(function (error) {
+            // handle error
+            reject(error);
+        });
     })
 }
