@@ -22,7 +22,3 @@ See the provided Notion documentation for design justification
 
 `lib` will be created upon building the typescript, and contains the js
 
-
-Todo Refactors: 
-Rename getAllTaggedEquipment to getAllTaggedEquipmentLocations
-Take out getVehicles
